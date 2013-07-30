@@ -1,0 +1,39 @@
+#!/bin/bash
+#script by Aaron Moore (Kevna), all rights reserved
+#compiles LaTeX source files to PDF using pdflatex
+#for 3 iterations or number specified by -n
+
+max=3
+#get command line arguments
+while [ $1 ]; do
+	if [ -f "$1" ]; then
+		files="$files $1"
+	fi
+	if [ "$1" == "-n" ]; then
+		shift
+		max=$1
+	fi
+	shift
+done
+
+if [ "$files" == "" ]; then
+	#echo error message into STDERR (file descriptor 2)
+	echo "usage is comptex filename <option>" >&2
+	exit 1
+fi
+for filename in $files; do
+	for i in $(seq 1 $max); do
+		pdflatex -halt-on-error $filename 2> texerr.log 1>/dev/null
+		if [ $? == 0 ]; then
+			echo "$filename written $i times"
+			rm texerr.log
+		else
+			cat texerr.log >&2
+			echo "failed to write $filename at iteration $i" >&2
+			echo "transcript available at $(pwd)/texerr.log" >&2
+			exit 1
+		fi
+	done
+done
+exit 0
+

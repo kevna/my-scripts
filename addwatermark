@@ -1,0 +1,27 @@
+#!/bin/bash
+#script by Aaron Moore (Kevna), all rights reserved
+#adds watermarks to specified files
+
+#get command line arguments
+while [ $1 ]; do
+	if [[ $1 == "-r" ]]; then
+		replaceFlag=1
+	fi
+	if [ -f "$1" ]; then
+		files="$files $1"
+	fi
+	shift
+done
+
+if [ "$files" == "" ]; then
+	#echo error message into STDERR (file descriptor 2)
+	echo "usage is addwatermark filename <option>" >&2
+	exit 1
+fi
+#loop through 'files'
+for fileName in $files; do
+	#add watermark to image
+	composite -dissolve 50% -gravity center -quality 100 \( /home/aaron/.watermarks/watermark2.png -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "wm-$fileName"; fi)
+done
+exit 0
+
