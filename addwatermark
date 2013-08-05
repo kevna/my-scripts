@@ -3,7 +3,6 @@
 #adds watermarks to specified files
 
 defaultWatermark="${HOME}/.watermarks/watermark.png"
-watermarkFile=$defaultWatermark
 #get command line arguments
 while [ $1 ]; do
 	case "$1" in
@@ -28,12 +27,6 @@ while [ $1 ]; do
 		else
 			echo "specified watermark not found" >&2
 			echo "resorting to default file" >&2
-			if [ -f "$defaultWatermark" ]; then
-				watermarkFile=$defaultWatermark
-			else
-				echo "default watermark not found" >&2
-				exit 2
-			fi
 		fi
 		;;
 	*)
@@ -45,6 +38,14 @@ while [ $1 ]; do
 	shift
 done
 
+if [ "$watermarkFile" == "" ]; then
+	if [ -f "$defaultWatermark" ]; then
+		watermarkFile=$defaultWatermark
+	else
+		echo "default watermark file not found" >&2
+		exit 2
+	fi
+fi
 if [ "$files" == "" ]; then
 	#echo error message into STDERR (file descriptor 2)
 	echo "usage is addwatermark filename <option>" >&2
