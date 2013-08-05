@@ -6,13 +6,20 @@
 max=3
 #get command line arguments
 while [ $1 ]; do
-	if [ -f "$1" ]; then
-		files="$files $1"
-	fi
-	if [ "$1" == "-n" ]; then
+	case "$1" in
+	"-h")
+		echo "some help"
+		;;
+	"-n")
 		shift
 		max=$1
-	fi
+		;;
+	*)
+		if [ -f "$1" ]; then
+			files="$files $1"
+		fi
+		;;
+	esac
 	shift
 done
 
