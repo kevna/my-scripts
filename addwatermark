@@ -42,7 +42,7 @@ if [ "$watermarkFile" == "" ]; then
 	if [ -f "$defaultWatermark" ]; then
 		watermarkFile=$defaultWatermark
 	else
-		echo "default watermark file not found" >&2
+		echo "default watermark file not found at $defaultWatermark" >&2
 		exit 2
 	fi
 fi
