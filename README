@@ -7,3 +7,7 @@ addwatermark places watermarks on to images, it takes a space delimited list of 
 	-r	replace file instead of generating new file
 	-f bar	specify "bar" as file to use as watermark
 
+comptex script compiles LaTeX document using pdflatex, it too takes a space delimited filename list and zero or more switches from:
+	-h/?	display help and exit
+	-n #	compiles the document # times (default = 3)
+
