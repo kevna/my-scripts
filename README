@@ -6,6 +6,7 @@ addwatermark places watermarks on to images, it takes a space delimited list of 
 	-h/?	display help message and exit
 	-r	replace file instead of generating new file
 	-f bar	specify "bar" as file to use as watermark
+	-o #	specify # as percentage opacity of the watermark image
 
 comptex script compiles LaTeX document using pdflatex, it too takes a space delimited filename list and zero or more switches from:
 	-h/?	display help and exit
