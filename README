@@ -1,1 +1,9 @@
 my command line scripts for linux
+
+they attempt to conform to the UNIX principle - 'do ONE thing and do it well'
+
+addwatermark places watermarks on to images, it takes a space delimited list of one or more files along with a list of zero or more switches (also space delimited) from:
+	-h/?	display help message and exit
+	-r	replace file instead of generating new file
+	-f bar	specify "bar" as file to use as watermark
+
