@@ -11,3 +11,6 @@ comptex script compiles LaTeX document using pdflatex, it too takes a space deli
 	-h/?	display help and exit
 	-n #	compiles the document # times (default = 3)
 
+remspace.sh simply iterates through a folder modifying the filenames to meet the following rules:
+no capitals, no superfluous symbols, dashes replace spaces
+
