@@ -2,13 +2,20 @@
 #script by Aaron Moore (Kevna), all rights reserved
 #adds watermarks to specified files
 
-defaultWatermark="~/.watermarks/watermark2.png"
+defaultWatermark="/home/aaron/.watermarks/watermark2.png"
+watermarkFile=$defaultWatermark
 #get command line arguments
 while [ $1 ]; do
 	case "$1" in
 	"-h")
-		echo "script adds a watermark to an image file"
-		echo ""
+		echo "this script adds a watermark to an image file"
+		echo "usage is addwatermark filename <option>"
+		echo "where \"filename\" is one or more files to be watermarked"
+		echo "and <option> may be zero or more switches from:"
+		echo -e "\t-r\treplace origin file rather than creating a seperate file"
+		echo -e "\t-f\tlocation of watermark file to apply"
+		echo -e "\t-h\tprint this help message"
+		echo "multiple filenames and options should be space-delimited"
 		exit 0
 		;;
 	"-r")
@@ -46,7 +53,7 @@ fi
 #loop through 'files'
 for fileName in $files; do
 	#add watermark to image
-	composite -dissolve 50% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "wm-$fileName"; fi)
+	composite -dissolve 50% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "wm-${fileName}"; fi)
 done
 exit 0
 
