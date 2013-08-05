@@ -7,8 +7,15 @@ max=3
 #get command line arguments
 while [ $1 ]; do
 	case "$1" in
-	"-h")
-		echo "some help"
+	"-h" | "-?")
+		echo "this script compiles a LaTeX file multiple times using pdflatex"
+		echo "usage is comptex filename <option>"
+		echo "where \"filename\" is one or more files to be compiled into pdf"
+		echo "and <option> may be zero or more switches from:"
+		echo -e "\t-n #\tcompile document # times"
+		echo -e "\t-h\tdisplay this help message and exit"
+		echo "multiple filenames and options should be space-delimited"
+		exit 0
 		;;
 	"-n")
 		shift
