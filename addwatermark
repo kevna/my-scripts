@@ -54,7 +54,7 @@ fi
 #loop through 'files'
 for fileName in $files; do
 	#add watermark to image
-	composite -dissolve 50% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "wm-${fileName}"; fi)
+	composite -dissolve 50% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "$(dirname $fileName)/wm-$(basename $fileName)"; fi)
 done
 exit 0
 
