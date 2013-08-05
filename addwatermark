@@ -12,7 +12,8 @@ while [ $1 ]; do
 		echo "where \"filename\" is one or more files to be watermarked"
 		echo "and <option> may be zero or more switches from:"
 		echo -e "\t-r\treplace origin file rather than creating a seperate file"
-		echo -e "\t-f\tlocation of watermark file to apply"
+		echo -e "\t-f bar\tlocation of watermark file to apply"
+		echo -e "\t-o #\topacity of watermark image 0-100"
 		echo -e "\t-h\tprint this help message"
 		echo "multiple filenames and options should be space-delimited"
 		exit 0
@@ -29,6 +30,15 @@ while [ $1 ]; do
 			echo "resorting to default file" >&2
 		fi
 		;;
+	"-o")
+		shift
+		if [[ $1 =~ ^1?[0-9]?[0-9]$ ]]; then
+			opacity=$1
+		else
+			echo "specified opacity was not valid" >&2
+			echo "resorting to default opacity" >&2
+		fi
+		;;
 	*)
 		if [ -f "$1" ]; then
 			files="$files $1"
@@ -38,6 +48,11 @@ while [ $1 ]; do
 	shift
 done
 
+#if opacity is not set by flag, set it here
+if [ "$opacity" == "" ]; then
+	opacity=50
+fi
+#if the flag didn't set the watermark file it should be set here
 if [ "$watermarkFile" == "" ]; then
 	if [ -f "$defaultWatermark" ]; then
 		watermarkFile=$defaultWatermark
@@ -54,7 +69,7 @@ fi
 #loop through 'files'
 for fileName in $files; do
 	#add watermark to image
-	composite -dissolve 50% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "$(dirname $fileName)/wm-$(basename $fileName)"; fi)
+	composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "$(dirname $fileName)/wm-$(basename $fileName)"; fi)
 done
 exit 0
 
