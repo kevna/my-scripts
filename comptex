@@ -19,11 +19,18 @@ while [ $1 ]; do
 		;;
 	"-n")
 		shift
-		max=$1
+		if [[ $1 =~ ^[0-9]+$ ]]; then
+			max=$1
+		else
+			echo "$1 is not a valid number of iterations" >&2
+			echo "resorting to default" >&2
+		fi
 		;;
 	*)
 		if [ -f "$1" ]; then
 			files="$files $1"
+		else
+			echo "$1 was not recognised as an argument or filename" >&2
 		fi
 		;;
 	esac
