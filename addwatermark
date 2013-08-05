@@ -7,7 +7,7 @@ watermarkFile=$defaultWatermark
 #get command line arguments
 while [ $1 ]; do
 	case "$1" in
-	"-h")
+	"-h" | "-?")
 		echo "this script adds a watermark to an image file"
 		echo "usage is addwatermark filename <option>"
 		echo "where \"filename\" is one or more files to be watermarked"
