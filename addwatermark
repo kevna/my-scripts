@@ -14,6 +14,7 @@ while [ $1 ]; do
 		echo -e "\t-r\treplace origin file rather than creating a seperate file"
 		echo -e "\t-f bar\tlocation of watermark file to apply"
 		echo -e "\t-o #\topacity of watermark image 0-100"
+		echo -e "\t-d bar\tdestination for watermarked files"
 		echo -e "\t-h\tprint this help message"
 		echo "multiple filenames and options should be space-delimited"
 		exit 0
@@ -37,6 +38,15 @@ while [ $1 ]; do
 		else
 			echo "specified opacity was not valid" >&2
 			echo "resorting to default opacity" >&2
+		fi
+		;;
+	"-d")
+		shift
+		if [[ -d "$1" ]]; then
+			destination=$1
+		else
+			echo "specified destination was not valid" >&2
+			echo "resorting to default directory" >&2
 		fi
 		;;
 	*)
@@ -68,8 +78,17 @@ if [ "$files" == "" ]; then
 fi
 #loop through 'files'
 for fileName in $files; do
+	if [[ $destination == "" ]]; then
+		if [[ $replaceFlag == 1 ]]; then
+			composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $fileName
+		else
+			composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(dirname $fileName)/wm-$(basename $fileName)
+		fi
+	else
+		composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName ${destination}/wm-$(basename $fileName)
+	fi
 	#add watermark to image
-	composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "$(dirname $fileName)/wm-$(basename $fileName)"; fi)
+	#composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "$(dirname $fileName)/wm-$(basename $fileName)"; fi)
 done
 exit 0
 
