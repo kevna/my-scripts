@@ -5,7 +5,7 @@
 
 max=3
 #get command line arguments
-while [ $1 ]; do
+while [[ $1 ]]; do
 	case "$1" in
 	"-h" | "-?")
 		echo "this script compiles a LaTeX file multiple times using pdflatex"
@@ -37,7 +37,7 @@ while [ $1 ]; do
 	shift
 done
 
-if [ "$files" == "" ]; then
+if [[ "$files" == "" ]]; then
 	#echo error message into STDERR (file descriptor 2)
 	echo "usage is comptex filename <option>" >&2
 	exit 1
@@ -45,7 +45,7 @@ fi
 for filename in $files; do
 	for i in $(seq 1 $max); do
 		pdflatex -halt-on-error $filename 2> texerr.log 1>/dev/null
-		if [ $? == 0 ]; then
+		if [[ $? == 0 ]]; then
 			echo "$filename written $i times"
 			rm texerr.log
 		else
