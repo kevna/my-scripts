@@ -36,6 +36,8 @@ while [ $1 ]; do
 			#set watermark location
 			watermarkFile="$1"
 		else
+			#set argument error flag
+			argErr=1
 			#inform user of invalid file on STDERR
 			echo "specified watermark not found" >&2
 			echo "resorting to default file" >&2
@@ -50,6 +52,8 @@ while [ $1 ]; do
 			#set opacity
 			opacity=$1
 		else
+			#set arugment error flag
+			argErr=1
 			#inform user of invalid opacity on STDERR
 			echo "specified opacity was not valid" >&2
 			echo "resorting to default opacity" >&2
@@ -64,6 +68,8 @@ while [ $1 ]; do
 			#set destination
 			destination=$1
 		else
+			#set argument error flag
+			argErr=1
 			#inform user of invalid destination
 			echo "specified destination was not valid" >&2
 			echo "resorting to default directory" >&2
@@ -82,6 +88,14 @@ while [ $1 ]; do
 	shift
 done
 
+#if an argument produced an error
+if [ "$argErr" == 1 ]; then
+	#and the replace switch was used
+	if [ "$replaceFlag" == 1]; then
+		#then die (to prevent overwiting files improperly)
+		exit 3
+	fi
+fi
 #if opacity is not set by flag, set it here
 if [ "$opacity" == "" ]; then
 	opacity=50
