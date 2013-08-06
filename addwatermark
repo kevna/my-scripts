@@ -32,14 +32,14 @@ while [[ $1 ]]; do
 		#get following arg ("bar")
 		shift
 		#check that "bar" is an existing file
-		if [[ -f "$1" ]]; then
+		if [[ $(file -b --mime-type $1 | cut -d \/ -f1) == "image" ]]; then
 			#set watermark location
 			watermarkFile="$1"
 		else
 			#set argument error flag
 			argErr=1
 			#inform user of invalid file on STDERR
-			echo "specified watermark not found" >&2
+			echo "specified watermark was not valid" >&2
 			echo "resorting to default file" >&2
 		fi
 		;;
@@ -78,9 +78,11 @@ while [[ $1 ]]; do
 	#default (if it wasn't any of the other options)
 	*)
 		#check that arg is a valid file
-		if [[ -f "$1" ]]; then
+		if [[ $(file -b --mime-type $1 | cut -d \/ -f 1) == "image" ]]; then
 			#add file to files to be processed
 			files="$files $1"
+		else
+			echo "$1 was not a valid image file"
 		fi
 		;;
 	esac
