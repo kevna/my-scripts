@@ -4,7 +4,7 @@
 
 defaultWatermark="${HOME}/.watermarks/watermark.png"
 #get command line arguments
-while [ $1 ]; do
+while [[ $1 ]]; do
 	#if $1 (current argument) is:
 	case "$1" in
 		#-h or -? (h)elp
@@ -32,7 +32,7 @@ while [ $1 ]; do
 		#get following arg ("bar")
 		shift
 		#check that "bar" is an existing file
-		if [ -f "$1" ]; then
+		if [[ -f "$1" ]]; then
 			#set watermark location
 			watermarkFile="$1"
 		else
@@ -78,7 +78,7 @@ while [ $1 ]; do
 	#default (if it wasn't any of the other options)
 	*)
 		#check that arg is a valid file
-		if [ -f "$1" ]; then
+		if [[ -f "$1" ]]; then
 			#add file to files to be processed
 			files="$files $1"
 		fi
@@ -89,21 +89,21 @@ while [ $1 ]; do
 done
 
 #if an argument produced an error
-if [ "$argErr" == 1 ]; then
+if [[ "$argErr" == 1 ]]; then
 	#and the replace switch was used
-	if [ "$replaceFlag" == 1]; then
+	if [[ "$replaceFlag" == 1 ]]; then
 		#then die (to prevent overwiting files improperly)
 		exit 3
 	fi
 fi
 #if opacity is not set by flag, set it here
-if [ "$opacity" == "" ]; then
+if [[ "$opacity" == "" ]]; then
 	opacity=50
 fi
 #if the flag didn't set the watermark file it should be set here
-if [ "$watermarkFile" == "" ]; then
+if [[ "$watermarkFile" == "" ]]; then
 	#ensure that default watermark file exists
-	if [ -f "$defaultWatermark" ]; then
+	if [[ -f "$defaultWatermark" ]]; then
 		#use default watermark
 		watermarkFile=$defaultWatermark
 	else
@@ -113,7 +113,7 @@ if [ "$watermarkFile" == "" ]; then
 		exit 2
 	fi
 fi
-if [ "$files" == "" ]; then
+if [[ "$files" == "" ]]; then
 	#echo error message into STDERR (file descriptor 2)
 	echo "usage is addwatermark filename <option>" >&2
 	#and die
