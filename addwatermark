@@ -5,8 +5,11 @@
 defaultWatermark="${HOME}/.watermarks/watermark.png"
 #get command line arguments
 while [ $1 ]; do
+	#if $1 (current argument) is:
 	case "$1" in
+		#-h or -? (h)elp
 	"-h" | "-?")
+		#display help information
 		echo "this script adds a watermark to an image file"
 		echo "usage is addwatermark filename <option>"
 		echo "where \"filename\" is one or more files to be watermarked"
@@ -17,44 +20,65 @@ while [ $1 ]; do
 		echo -e "\t-d bar\tdestination for watermarked files"
 		echo -e "\t-h\tprint this help message"
 		echo "multiple filenames and options should be space-delimited"
+		#exit cleanly
 		exit 0
 		;;
+	#-r (r)eplace
 	"-r")
 		replaceFlag=1
 		;;
+	#-f "bar" (f)ile
 	"-f")
+		#get following arg ("bar")
 		shift
+		#check that "bar" is an existing file
 		if [ -f "$1" ]; then
+			#set watermark location
 			watermarkFile="$1"
 		else
+			#inform user of invalid file on STDERR
 			echo "specified watermark not found" >&2
 			echo "resorting to default file" >&2
 		fi
 		;;
+	#-o # (o)pacity
 	"-o")
+		#get following arg (#)
 		shift
+		#check that # is a valid number (0-100)
 		if [[ $1 =~ ^1?[0-9]?[0-9]$ ]]; then
+			#set opacity
 			opacity=$1
 		else
+			#inform user of invalid opacity on STDERR
 			echo "specified opacity was not valid" >&2
 			echo "resorting to default opacity" >&2
 		fi
 		;;
+	#-d "bar" (d)estination
 	"-d")
+		#get following arg ("bar")
 		shift
+		#check that "bar" is an existing directory
 		if [[ -d "$1" ]]; then
+			#set destination
 			destination=$1
 		else
+			#inform user of invalid destination
 			echo "specified destination was not valid" >&2
 			echo "resorting to default directory" >&2
 		fi
 		;;
+	#default (if it wasn't any of the other options)
 	*)
+		#check that arg is a valid file
 		if [ -f "$1" ]; then
+			#add file to files to be processed
 			files="$files $1"
 		fi
 		;;
 	esac
+	#move to next argument
 	shift
 done
 
@@ -64,31 +88,42 @@ if [ "$opacity" == "" ]; then
 fi
 #if the flag didn't set the watermark file it should be set here
 if [ "$watermarkFile" == "" ]; then
+	#ensure that default watermark file exists
 	if [ -f "$defaultWatermark" ]; then
+		#use default watermark
 		watermarkFile=$defaultWatermark
 	else
+		#inform user that default watermark is not valid on STDERR
 		echo "default watermark file not found at $defaultWatermark" >&2
+		#and die
 		exit 2
 	fi
 fi
 if [ "$files" == "" ]; then
 	#echo error message into STDERR (file descriptor 2)
 	echo "usage is addwatermark filename <option>" >&2
+	#and die
 	exit 1
 fi
 #loop through 'files'
 for fileName in $files; do
+	#if a destination was not specified
 	if [[ $destination == "" ]]; then
+		#if flag set to replace
 		if [[ $replaceFlag == 1 ]]; then
+			#replace files
 			composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $fileName
 		else
+			#watermark files
 			composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(dirname $fileName)/wm-$(basename $fileName)
 		fi
 	else
+		#watermark files (watermarks to destination)
 		composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName ${destination}/wm-$(basename $fileName)
 	fi
 	#add watermark to image
 	#composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "$(dirname $fileName)/wm-$(basename $fileName)"; fi)
 done
+#exit cleanly
 exit 0
 
