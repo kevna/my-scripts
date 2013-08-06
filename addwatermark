@@ -18,6 +18,8 @@ while [[ $1 ]]; do
 		echo -e "\t-f bar\tlocation of watermark file to apply"
 		echo -e "\t-o #\topacity of watermark image 0-100"
 		echo -e "\t-d bar\tdestination for watermarked files"
+		echo -e "\t-v\tuse verbose output (display prgress)"
+		echo -e "\t-vv\tuse very verbose output (display aditional information)"
 		echo -e "\t-h\tprint this help message"
 		echo "multiple filenames and options should be space-delimited"
 		#exit cleanly
@@ -26,6 +28,14 @@ while [[ $1 ]]; do
 	#-r (r)eplace
 	"-r")
 		replaceFlag=1
+		;;
+	#-v (v)erbose
+	"-v")
+		verbosity="-monitor"
+		;;
+	#-vv (v)ery (v)erbose
+	"-vv")
+		verbosity="-monitor -verbose"
 		;;
 	#-f "bar" (f)ile
 	"-f")
@@ -128,17 +138,17 @@ for fileName in $files; do
 		#if flag set to replace
 		if [[ $replaceFlag == 1 ]]; then
 			#replace files
-			composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $fileName
+			target=$fileName
 		else
 			#watermark files
-			composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(dirname $fileName)/wm-$(basename $fileName)
+			target=$(dirname $fileName)/wm-$(basename $fileName)
 		fi
 	else
 		#watermark files (watermarks to destination)
-		composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName ${destination}/wm-$(basename $fileName)
+		target="${destination}/wm-$(basename $fileName)"
 	fi
 	#add watermark to image
-	#composite -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $(if [[ $replaceFlag == 1 ]]; then echo "$fileName"; else echo "$(dirname $fileName)/wm-$(basename $fileName)"; fi)
+	composite $verbosity -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $target
 done
 #exit cleanly
 exit 0
