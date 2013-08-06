@@ -8,6 +8,7 @@ addwatermark places watermarks on to images, it takes a space delimited list of 
 	-f bar	specify "bar" as file to use as watermark
 	-o #	specify # as percentage opacity of the watermark image
 	-d bar	specify "bar" as the destination for the watermarked files
+	-v/vv	use verbose (display progress) or very-verbose (also display file info) output
 
 comptex script compiles LaTeX document using pdflatex, it too takes a space delimited filename list and zero or more switches from:
 	-h/?	display help and exit
