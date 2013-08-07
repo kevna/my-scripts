@@ -4,6 +4,7 @@ They attempt to conform to the UNIX principle - 'do ONE thing and do it well' an
 "addwatermark" places watermarks on to images, it takes a space delimited list of one or more files along with a list of zero or more switches (also space delimited) from:
 	-h/?	display help message and exit
 	-r	replace file instead of generating new file
+	-q	do not ask before replacing files
 	-f bar	specify "bar" as file to use as watermark
 	-o #	specify # as percentage opacity of the watermark image
 	-d bar	specify "bar" as the destination for the watermarked files
