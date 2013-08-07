@@ -15,6 +15,7 @@ while [[ $1 ]]; do
 		echo "where \"filename\" is one or more files to be watermarked"
 		echo "and <option> may be zero or more switches from:"
 		echo -e "\t-r\treplace origin file rather than creating a seperate file"
+		echo -e "\t-q\tdo not ask before replacing files"
 		echo -e "\t-f bar\tlocation of watermark file to apply"
 		echo -e "\t-o #\topacity of watermark image 0-100"
 		echo -e "\t-d bar\tdestination for watermarked files"
@@ -28,6 +29,10 @@ while [[ $1 ]]; do
 	#-r (r)eplace
 	"-r")
 		replaceFlag=1
+		;;
+	#q (q)uiet
+	"-q")
+		quietFlag=1
 		;;
 	#-v (v)erbose
 	"-v")
@@ -133,12 +138,23 @@ if [[ "$files" == "" ]]; then
 fi
 #loop through 'files'
 for fileName in $files; do
+	skipFlag=0
 	#if a destination was not specified
 	if [[ $destination == "" ]]; then
 		#if flag set to replace
 		if [[ $replaceFlag == 1 ]]; then
-			#replace files
-			target=$fileName
+			if [[ $quietFlag == 1 ]]; then
+				target=$filename
+			else
+				echo -n "replace ${fileName}? [Y/n]"
+				read ans
+				if [[ $ans == "Y" || $ans == "y" ]]; then
+					#replace files
+					target=$fileName
+				else
+					skipFlag=1
+				fi
+			fi
 		else
 			#watermark files
 			target=$(dirname $fileName)/wm-$(basename $fileName)
@@ -147,8 +163,10 @@ for fileName in $files; do
 		#watermark files (watermarks to destination)
 		target="${destination}/wm-$(basename $fileName)"
 	fi
-	#add watermark to image
-	composite $verbosity -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $target
+	if [[ $skipFlag == 0 ]]; then
+		#add watermark to image
+		composite $verbosity -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $target
+	fi
 done
 #exit cleanly
 exit 0
