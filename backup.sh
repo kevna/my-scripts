@@ -16,26 +16,33 @@ fi
 
 if [ ! -e ~/backup.txt ]; then exit 0; fi
 if [ -e ${tarballFile}.tar.gz ]; then
-	mv ${tarballFile}.tar.gz ${tarballFile}.old; fi;
-	tar cvf ${tarballFile}.tar scripts > backup.log
-	if [ $? == 0 ]; then echo "tarball created (scripts).";
-		else echo "tarball creation failed."; exit 1; fi;
-		for files in $(cat ~/scripts/backup.txt | grep -v \#); do
-			if [ -e $files ]; then
-				tar rvf ${tarballFile}.tar $files >> backup.log
-				if [ $? == 0 ]; then echo "$files added to tarball.";
-					else echo "failed to add $files to tarball.";
-				fi;
+	mv ${tarballFile}.tar.gz ${tarballFile}.old
+fi
+tar cvf ${tarballFile}.tar scripts > backup.log
+if [ $? == 0 ]; then
+	echo "tarball created (scripts)."
+else
+	echo "tarball creation failed." >&2
+	exit 1
+fi
+	for files in $(cat ~/scripts/backup.txt | grep -v \#); do
+		if [ -e $files ]; then
+			tar rvf ${tarballFile}.tar $files >> backup.log
+			if [ $? == 0 ]; then
+				echo "$files added to tarball."
 			else
-				echo "$files is not an existing directory or file.";
-			fi;
-		done
+				echo "failed to add $files to tarball." >&2
+			fi
+		else
+			echo "$files is not an existing directory or file." >&2
+		fi
+	done
 echo "compressing tarball."
 gzip ${tarballFile}.tar
 if [ $? == 0 ]; then
-	echo "done.";
+	echo "done."
 else
-	echo "compression failed.";
-	exit 1;
-fi;
+	echo "compression failed." >&2
+	exit 1
+fi
 
