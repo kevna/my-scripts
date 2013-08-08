@@ -11,7 +11,7 @@ if [ -e ${tarballFile}.tar.gz ]; then mv ${tarballFile}.tar.gz ${tarballFile}.ol
 tar cvf ${tarballFile}.tar scripts > backup.log
 if [ $? == 0 ]; then echo "tarball created (scripts).";
 else echo "tarball creation failed."; exit 1; fi;
-for files in $(cat ~/scripts/backup.txt); do
+for files in $(cat ~/scripts/backup.txt | grep -v \#); do
 	if [ ! $(echo $files|cut -c1-1) == '#'  ]; then if [ -e $files ]; then
 		tar rvf ${tarballFile}.tar $files >> backup.log
 		if [ $? == 0 ]; then echo "$files added to tarball.";
