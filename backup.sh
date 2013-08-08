@@ -1,5 +1,5 @@
 #!/bin/bash
-#script by Aaron Moore (Dent), all rights reserved
+#script by Aaron Moore (Kevna), all rights reserved
 #tarball ~/scripts and all files named in backup.txt
 #verbose output in backup.log
 set position="$(pwd)"
