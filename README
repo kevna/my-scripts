@@ -1,6 +1,8 @@
 My command line scripts for linux.
 They attempt to conform to the UNIX principle - 'do ONE thing and do it well' and they output their warning and fatal error messages through STDERR
 
+"backup.sh" backs up files listed in the file ~/backup.txt, if not running on the named server it will also call the server copy of the script & download the resulting tarball
+
 "addwatermark" places watermarks on to images, it takes a space delimited list of one or more files along with a list of zero or more switches (also space delimited) from:
 	-h/?	display help message and exit
 	-r	replace file instead of generating new file
