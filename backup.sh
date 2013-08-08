@@ -5,8 +5,16 @@
 
 tarballFile="~/localtarball"
 
-if [ ! -e ~/scripts/backup.txt ]; then exit 1; fi;
-cd /aber/aam13
+
+echo $HOSTNAME
+if [[ "$HOSTNAME" != "central.aber.ac.uk" ]]; then
+	echo "calling remote backup."
+	ssh central 'backup.sh'
+	echo "copying backup file."
+	scp central:mtarball.tar.gz ~/
+fi
+
+if [ ! -e ~/backup.txt ]; then exit 0; fi
 if [ -e ${tarballFile}.tar.gz ]; then mv ${tarballFile}.tar.gz ${tarballFile}.old; fi;
 tar cvf ${tarballFile}.tar scripts > backup.log
 if [ $? == 0 ]; then echo "tarball created (scripts).";
