@@ -3,9 +3,9 @@
 #tarball ~/scripts and all files named in backup.txt
 #verbose output in backup.log
 
-tarballFile="~/localtarball"
+tarballFile="mtarball"
 
-
+cd
 echo $HOSTNAME
 if [[ "$HOSTNAME" != "central.aber.ac.uk" ]]; then
 	echo "calling remote backup."
@@ -25,7 +25,7 @@ else
 	echo "tarball creation failed." >&2
 	exit 1
 fi
-	for files in $(cat ~/scripts/backup.txt | grep -v \#); do
+	for files in $(cat ~/backup.txt | grep -v \#); do
 		if [ -e $files ]; then
 			tar rvf ${tarballFile}.tar $files >> backup.log
 			if [ $? == 0 ]; then
