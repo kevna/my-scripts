@@ -165,7 +165,7 @@ for fileName in $files; do
 	fi
 	if [[ $skipFlag == 0 ]]; then
 		#add watermark to image
-		composite $verbosity -dissolve ${opacity}% -gravity center -quality 100 \( $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $target
+		composite $verbosity -dissolve ${opacity}% -gravity center -quality 100 \( -background none $watermarkFile -resize $(identify $fileName | awk '{print $3}')\! \) $fileName $target
 	fi
 done
 #exit cleanly
