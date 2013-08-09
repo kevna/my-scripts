@@ -2,7 +2,7 @@
 #script by Aaron Moore (Kevna), all rights reserved
 #adds watermarks to specified files
 
-defaultWatermark="${HOME}/.watermarks/watermark.png"
+defaultWatermark="${HOME}/.watermarks/watermark.svg"
 #get command line arguments
 while [[ $1 ]]; do
 	#if $1 (current argument) is:
