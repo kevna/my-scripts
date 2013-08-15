@@ -1,4 +1,7 @@
-My command line scripts for linux.
+bash scripts
+============
+
+My command line scripts written for the linux Bourne Again SHell.
 They attempt to conform to the UNIX principle - 'do ONE thing and do it well' and they output their warning and fatal error messages through STDERR
 
 backup.sh
