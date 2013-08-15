@@ -11,19 +11,19 @@ backup.sh
 addwatermark
 ------------
 "addwatermark" places watermarks on to images, it takes a space delimited list of one or more files along with a list of zero or more switches (also space delimited) from:
-	-h/?	display help message and exit
-	-r	replace file instead of generating new file
-	-q	do not ask before replacing files
-	-f bar	specify "bar" as file to use as watermark
-	-o #	specify # as percentage opacity of the watermark image
-	-d bar	specify "bar" as the destination for the watermarked files
-	-v/vv	use verbose (display progress) or very-verbose (also display file info) output
+* -h/?	display help message and exit
+* -r	replace file instead of generating new file
+* -q	do not ask before replacing files
+* -f bar	specify "bar" as file to use as watermark
+* -o #	specify # as percentage opacity of the watermark image
+* -d bar	specify "bar" as the destination for the watermarked files
+* -v/vv	use verbose (display progress) or very-verbose (also display file info) output
 
 comptex
 -------
 "comptex" script compiles LaTeX document using pdflatex, it too takes a space delimited filename list and zero or more switches from:
-	-h/?	display help and exit
-	-n #	compiles the document # times (default = 3)
+* -h/?	display help and exit
+* -n #	compiles the document # times (default = 3)
 
 remspace.sh
 -----------
