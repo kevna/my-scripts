@@ -14,6 +14,7 @@ addwatermark
 * -h/?	display help message and exit
 * -r	replace file instead of generating new file
 * -q	do not ask before replacing files
+* -s	'spin' file (orients files using 'gravity')
 * -f bar	specify "bar" as file to use as watermark
 * -o #	specify # as percentage opacity of the watermark image
 * -d bar	specify "bar" as the destination for the watermarked files
