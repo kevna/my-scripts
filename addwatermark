@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #script by Aaron Moore (Kevna), all rights reserved
 #adds watermarks to specified files
 
